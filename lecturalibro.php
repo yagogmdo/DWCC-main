@@ -50,10 +50,14 @@
   <button id="next">Siguiente</button>
   &nbsp; &nbsp;
   <span id="page_num"></span> / <span id="page_count"></span></span><br>
+  <select id="marcador" onchange="cambiarpagmarcador()">
+  <option disabled selected>Elija marcador guardado</option>
+  </select>
+  <button onclick="guardarpagina()">Guardar marcador</button>
           </li>
          <li><form >
 <textarea readonly type="text" id="sel" placeholder="TEXTO A TRADUCIR" rows="30" cols="100""></textarea>
-<input type="button" value="TRADUCIR" onclick="enviar()">
+<div class="wrap"><input type="button" value="TRADUCIR"  id="traducir" onclick="enviar()"></div>
 </form>
 <div id="trad">
 </div>
@@ -262,12 +266,34 @@ pdfjsLib.getDocument(url).promise.then(function selectorpag(pdfDoc_){
         }
 
 
-
-
-
-
 });
+
+
+
+// MARCADOR PARA LIBRO
+function cambiarpagmarcador(){
+    pagina = parseInt(document.getElementById("marcador").value);
+    pageNum=pagina;
+      queueRenderPage(pagina);
+    }
+
+    function guardarpagina(){
+      var marcadores=[];
+      var pagina=document.getElementById('page_num').textContent;
+      marcadores.push(pagina);
+      for(marcador=0;marcador<marcadores.length; marcador++){
+          var selector=document.getElementById('marcador');
+          var option=document.createElement("option");
+          selector.appendChild(option);
+          option.setAttribute("id","pp");
+          option.setAttribute("value",marcadores[marcador]);
+          option.innerHTML="Marcador de la página "+marcadores[marcador];
+        }
+    }
+
+
 </script>
+
 
 </body>
 </html>

@@ -4,6 +4,9 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="./menu.js"></script>
         <script src="biblio.js"></script></script>
         <script src="menu.js"></script></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="valoraciones.min.js"></script>
         <link rel="stylesheet" href="biblio.css">
     </head>
     <body>
@@ -43,11 +46,58 @@
                    $numero=$row['numero'];
                    if($row['tipo']=="novela"){
                     echo "<div  class='menuizq'><h2>". $row['nombre'] . " ". $row['numero'] . "</h2><p>". $row['descripcion'] . " </p></div>";       
-                    echo "<div  class='container'><div style='background-image:url(".$row['imagenback'].");' class='background-img'></div><div  class='box'><span></span><span></span><span></span><span></span> <a class='content' href='#' ><img  onclick=\"abrirdirectorio2(".$row["iduni"].");\"  id=\"".$row['iduni']."\" width=\"320\" height=\"450\"  src='". $row['link']."'/></a></div></div>";
+                    echo "<div  class='container'><div style='background-image:url(".$row['imagenback'].");' class='background-img'></div><div  class='box'><span></span><span></span><span></span><span></span> <a class='content' href='#' ><img  onclick=\"abrirdirectorio2(".$row["iduni"].");\"  id=\"".$row['iduni']."\" width=\"320\" height=\"450\"  src='". $row['link']."'/></a>"?>
+                    
+                    <div id="puntos"></div>
+                      <p id="puntuacion">Puntuación: <span></span></p>
+                    <script>
+                      var id=document.querySelector("a>img").getAttribute("id");
+                      var puntuaciones = function(datos) {
+                      $parrafo=datos.selector.next('#puntuacion');
+                      $parrafo.children('span').text(datos.valor);
+                      sessionStorage.setItem('puntuacion'+id, datos.valor);
+                      
+                        };
+                        $parrafo=document.querySelector('#puntuacion>span');
+                        $parrafo.innerHTML=sessionStorage.getItem('puntuacion'+id);
+                    
+                      $(function() {$('#puntos').valoraciones({star_tot:10, star_max:100,star_size:1,star_valor:sessionStorage.getItem('puntuacion'+id), evento:'click', callback:puntuaciones});});
+                      
+                      
+                    </script>
+                    
+                    
+                    
+                    <?php
+                    echo "</div></div>";
                    }
                    else{   
                    echo "<div  class='menuizq'><h2>". $row['nombre'] . " ". $row['numero'] . "</h2><p>". $row['descripcion'] . " </p></div>";       
-                   echo "<div class='container'><div style='background-image:url(".$row['imagenback'].");' class='background-img'></div><div  class='box'><span></span><span></span><span></span><span></span> <a class='content' href='#' ><img  onclick=\"abrirdirectorio(".$row["iduni"].");\"  id=\"".$row['iduni']."\" width=\"320\" height=\"450\"  src='". $row['link']."'/></a></div></div>";
+                   echo "<div class='container'><div style='background-image:url(".$row['imagenback'].");' class='background-img'></div><div  class='box'><span></span><span></span><span></span><span></span> <a class='content' href='#' ><img  onclick=\"abrirdirectorio(".$row["iduni"].");\"  id=\"".$row['iduni']."\" width=\"320\" height=\"450\"  
+                   src='". $row['link']."'/></a>"?>
+                  
+                   <div id="puntos"></div>
+                      <p id="puntuacion">Puntuación: <span></span></p>
+                    <script>
+                      var id=document.querySelector("a>img").getAttribute("id");
+                      var puntuaciones = function(datos) {
+                      $parrafo=datos.selector.next('#puntuacion');
+                      $parrafo.children('span').text(datos.valor);
+                      sessionStorage.setItem('puntuacion'+id, datos.valor);
+                      
+                        };
+                        $parrafo=document.querySelector('#puntuacion>span');
+                        $parrafo.innerHTML=sessionStorage.getItem('puntuacion'+id);
+                    
+                      $(function() {$('#puntos').valoraciones({star_tot:10, star_max:100,star_size:1,star_valor:sessionStorage.getItem('puntuacion'+id), evento:'click', callback:puntuaciones});});
+                      
+                      
+                    </script>
+
+
+
+                   <?php
+                   echo "</div></div>";
                     }
                   }
            }
