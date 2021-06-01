@@ -280,15 +280,25 @@ function cambiarpagmarcador(){
     function guardarpagina(){
       var marcadores=[];
       var pagina=document.getElementById('page_num').textContent;
-      marcadores.push(pagina);
+        marcadores.push(pagina);
       for(marcador=0;marcador<marcadores.length; marcador++){
-          var selector=document.getElementById('marcador');
-          var option=document.createElement("option");
-          selector.appendChild(option);
-          option.setAttribute("id","pp");
-          option.setAttribute("value",marcadores[marcador]);
-          option.innerHTML="Marcador de la página "+marcadores[marcador];
+          var opciones=document.querySelectorAll("#marcador>option");
+          for(opcion of opciones){
+            if(!marcadores.includes(opciones.value)){
+              var selector=document.getElementById('marcador');
+              var option=document.createElement("option");
+               selector.appendChild(option);
+               option.setAttribute("value",marcadores[marcador]);
+               option.innerHTML="Marcador de la página "+marcadores[marcador];
+            }
+            else{
+              alert("Ya hay un marcador en esa página");
+              break;
+            }
+          }
+          
         }
+
     }
 
 
