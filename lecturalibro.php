@@ -6,7 +6,9 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="./menu.js"></script>
 <script src="//mozilla.github.io/pdf.js/build/pdf.js" crossorigin="anonymous"></script>
 <link href="//mozilla.github.io/pdf.js/web/viewer.css" rel="stylesheet" type="text/css" />
-
+<script src="./alertify.min.js"></script>
+<link rel="stylesheet" href="./css/alertify.min.css" />
+<link rel="stylesheet" href="./css/themes/default.min.css" />
 <style type="text/css">
 
 
@@ -57,7 +59,7 @@
           </li>
          <li><form >
 <textarea readonly type="text" id="sel" placeholder="TEXTO A TRADUCIR" rows="30" cols="100""></textarea>
-<div class="wrap"><input type="button" value="TRADUCIR"  id="traducir" onclick="enviar()"></div>
+<div class="wrap"><button  value="TRADUCIR"  id="traducir" onclick="return enviar()">TRADUCIR</button>
 </form>
 <div id="trad">
 </div>
@@ -102,12 +104,13 @@ libro.onmouseup = libro.onkeyup = libro.onselectionchange = function() {
 	{
 		// Esta es la variable que vamos a pasar
 		var miVariableJS=$("#sel").val();
- 
 		// Enviamos la variable de javascript a archivo.php
 		$.post("archivo.php",{"sel":miVariableJS},function(respuesta){
-      document.querySelector("#sel").removeAttribute("readonly");
-      document.getElementById('trad').innerHTML = respuesta;
+      //document.getElementById('trad').innerHTML = respuesta;
+      alertify.set('notifier','position', 'top-right');
+      alertify.success(respuesta);
 		});
+    return false;
 	}
 
 </script>
@@ -278,32 +281,66 @@ function cambiarpagmarcador(){
     }
 
     function guardarpagina(){
-      var marcadores=[];
+       if(!sessionStorage.getItem('marcadores'+id)){
+        var marcadores=[];
+       }
+       var id=getParameterByName('nombre');
       var pagina=document.getElementById('page_num').textContent;
-        marcadores.push(pagina);
+      if(sessionStorage.getItem('marcadores'+id)!=pagina){
+      sessionStorage.setItem('marcadores'+id, pagina);
+      marcadores=sessionStorage.getItem('marcadores'+id);
       for(marcador=0;marcador<marcadores.length; marcador++){
           var opciones=document.querySelectorAll("#marcador>option");
           for(opcion of opciones){
-            if(!marcadores.includes(opciones.value)){
               var selector=document.getElementById('marcador');
               var option=document.createElement("option");
                selector.appendChild(option);
                option.setAttribute("value",marcadores[marcador]);
                option.innerHTML="Marcador de la página "+marcadores[marcador];
-            }
-            else{
-              alert("Ya hay un marcador en esa página");
-              break;
+               var marc_libro=[];
+               marc_libro[marcador]=marcadores[marcador];
+               sessionStorage.setItem('marc_libro', JSON.stringify(marcadores[marcador]));
+               break;
             }
           }
           
         }
+        
+        else{
+              alert("Ya hay un marcador en esa página");
+            }
 
     }
+  
 
 
 </script>
 
+
+<script>
+window.onload=function(){
+  function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+    var id=getParameterByName('nombre');
+    if(sessionStorage.getItem('marc_libro')){
+      var marc= JSON.parse(sessionStorage.getItem('marc_libro'));
+      for(i=0;i<marc.length;i++){
+        alert(marc[i]);
+          var selector=document.getElementById('selpag');
+          var option=document.createElement("option");
+          selector.appendChild(option);
+          option.setAttribute("id","oppag");
+          option.setAttribute("value",marc[i]);
+          option.innerHTML="Página "+marc[i];
+      }
+    }
+}
+  
+  </script>
 
 </body>
 </html>
